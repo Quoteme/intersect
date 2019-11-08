@@ -21,9 +21,12 @@ const interval2interval = (i,j) => j[0] <= i[0] && i[1] <= j[1];
 //		(min Z, max Z)
 //	]
 // point2plane :: Real a => (a,a) -> [(a,a)] -> Boolean
-const point2plane = (a,p) => a
-	.map((x,i) => point2interval(x,p[i]))
-	.every(x => x==true)
+const point2plane = (a,p) =>
+	a.length == p.length
+	? a
+		.map((x,i) => point2interval(x,p[i]))
+		.every(x => x==true)
+	: undefined
 
 // also works on n dimensional objects
 // planes are defined as in the section point2plane
@@ -46,11 +49,23 @@ const point2circle = (p,r,q=p.map(_=>0),d=Math.hypot) =>
 // plane2circle :: Real a => [(a,a)] -> a -> [a] -> ([a] -> Real) -> Boolean
 // const plane2circle =
 
-export(
+// determines if a point is an element of a n-D array
+// point2Array :: Int a => [a] -> [a]^n -> Boolean
+const point2Array = (a,arr) =>
+	a.map(x => Number.isInteger(x)).every(x => x==true)
+	? new Array(a.length)
+		.fill(0)
+		.map((_,i) => [0,[arr].flat(i)[0].length])
+		.map((e,i) => point2interval(a[i],e))
+		.every(x => x==true)
+	: undefined
+
+export {
 	point2point,
 	point2interval,
 	interval2interval,
 	point2plane,
 	plane2plane,
-	point2circle
-)
+	point2circle,
+	point2Array
+}
