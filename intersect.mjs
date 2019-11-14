@@ -52,10 +52,10 @@ const point2circle = (p,r,q=p.map(_=>0),d=Math.hypot) =>
 // determines if a point is an element of a n-D array
 // point2Array :: Int a => [a] -> [a]^n -> Boolean
 const point2Array = (a,arr) =>
-	a.map(x => Number.isInteger(x)).every(x => x==true)
+	a.filter(x => !Number.isInteger(x)) == 0
 	? new Array(a.length)
 		.fill(0)
-		.map((_,i) => [0,[arr].flat(i)[0].length])
+		.map((_,i) => [0,[arr].flat(i)[0].length-1])
 		.map((e,i) => point2interval(a[i],e))
 		.every(x => x==true)
 	: undefined
