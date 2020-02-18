@@ -50,8 +50,16 @@ export const plane2plane = (p,q) =>
 export const point2circle = (p,r,q=p.map(_=>0),d=Math.hypot) =>
 	d(...p.map((x,i) => x-q[i])) <= r;
 
-// plane2circle :: Real a => [(a,a)] -> a -> [a] -> ([a] -> Real) -> Boolean
-// const plane2circle = (p,r,c,d=Math.hypot) =>
+// determines if a circle intersects an interval
+// interval2circle :: Num a => a -> Real -> [a,a] -> Boolean
+export const interval2circle = (c,r,i,d=Math.hypot) =>
+	point2circle([c], r+Math.abs(i[0]-i[1])/2, [(i[0]+i[1])/2], d)
+
+// determines if a hypersphere intersects a Hyperplane
+// plane2circle :: Num a => [(a,a)] -> Real -> [a] -> ([a] -> Real) -> Boolean
+export const plane2circle = (p,r,c,d=Math.hypot) => p
+	.map((i,j) => interval2circle(c[j],r,i,d) )
+	.every(e => e==true)
 
 // determines if a point is an element of a n-D array
 // point2Array :: Int a => [a] -> [a]^n -> Boolean
